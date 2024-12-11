@@ -3,14 +3,24 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
-      primaryColor: Colors.teal,
+      colorScheme: const ColorScheme.light(
+        primary: Colors.teal,
+        secondary: Colors.tealAccent,
+        surface: Colors.white,
+        background: Colors.white,
+        onPrimary: Colors.white,
+        onSecondary: Colors.black,
+        onSurface: Colors.black,
+        onBackground: Colors.black,
+        error: Colors.red,
+      ),
       scaffoldBackgroundColor: Colors.white,
-      cardColor: Colors.white, // Warna card untuk mode terang
-      appBarTheme: AppBarTheme(
+      cardColor: Colors.white,
+      appBarTheme: const AppBarTheme(
         color: Colors.teal,
         elevation: 0,
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         titleLarge: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -18,7 +28,7 @@ class AppTheme {
         ),
         bodyMedium: TextStyle(
           fontSize: 14,
-          color: Colors.grey[800],
+          color: Colors.black87,
         ),
       ),
     );
@@ -26,14 +36,22 @@ class AppTheme {
 
   static ThemeData get darkTheme {
     return ThemeData(
-      primaryColor: Colors.teal,
+      colorScheme: const ColorScheme.dark(
+        primary: Colors.teal,
+        secondary: Colors.tealAccent,
+        surface: Colors.grey,
+        onPrimary: Colors.black,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        error: Colors.red,
+      ),
       scaffoldBackgroundColor: Colors.grey[900],
-      cardColor: Colors.grey[850], // Warna card untuk mode gelap
-      appBarTheme: AppBarTheme(
-        color: Colors.grey[850],
+      cardColor: Colors.grey[850],
+      appBarTheme: const AppBarTheme(
+        color: Colors.teal,
         elevation: 0,
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         titleLarge: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -41,7 +59,7 @@ class AppTheme {
         ),
         bodyMedium: TextStyle(
           fontSize: 14,
-          color: Colors.grey[400],
+          color: Colors.white,
         ),
       ),
     );

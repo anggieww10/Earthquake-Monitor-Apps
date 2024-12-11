@@ -1,43 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/earthquake_provider.dart';
+import './providers/theme_provider.dart';
 import './screens/home_screen.dart';
 import './themes/app_theme.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => EarthquakeProvider()),
-      ],
-      child: MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  bool isDarkMode = false; // State untuk tema
-
-  void toggleTheme() {
-    setState(() {
-      isDarkMode = !isDarkMode; // Ubah status tema
-    });
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
-      home: HomeScreen(
-        isDarkMode: isDarkMode,
-        onToggleTheme: toggleTheme,
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => EarthquakeProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: const AppRoot(),
+    );
+  }
+}
+
+class AppRoot extends StatelessWidget {
+  const AppRoot({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: themeProvider.isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const HomeScreen(),
+            // Tambahkan route lain di sini jika perlu
+          },
+        );
+      },
     );
   }
 }

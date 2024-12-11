@@ -1,45 +1,66 @@
 import 'package:flutter/material.dart';
 import '../models/earthquake_model.dart';
 import '../services/api_service.dart';
-import 'package:logger/logger.dart';  // Import Logger
+import 'package:logger/logger.dart';
 
 class EarthquakeProvider with ChangeNotifier {
+  final Logger _logger = Logger();
+
   List<Earthquake> _earthquakes = [];
   List<Earthquake> _filteredEarthquakes = [];
   bool _isLoading = false;
+  String? _error;
 
-  final Logger _logger = Logger();  // Instance dari Logger
-
+  // Getter untuk state
   List<Earthquake> get earthquakes => _filteredEarthquakes;
   bool get isLoading => _isLoading;
+  String? get error => _error;
 
-  // Fetch data dari API
+  /// Fetch data dari API
   Future<void> fetchEarthquakes() async {
-    _isLoading = true;
-    notifyListeners(); // Beritahu UI untuk menampilkan loading spinner
+    // Set loading state
+    _setLoading(true);
+
     try {
       final fetchedData = await ApiService().fetchEarthquakes();
       _earthquakes = fetchedData;
-      _filteredEarthquakes = fetchedData; // Default: semua data ditampilkan
+      _filteredEarthquakes = fetchedData;
+      _logger.i("Successfully fetched ${fetchedData.length} earthquakes.");
     } catch (e) {
-      _logger.e("Error fetching earthquakes: $e");  // Gunakan logger untuk mencatat error
+      _setError("Failed to fetch data. Please try again.");
+      _logger.e("Error fetching earthquakes: $e");
     } finally {
-      _isLoading = false;
-      notifyListeners(); // Beritahu UI bahwa data telah diperbarui
+      _setLoading(false);
     }
   }
 
-  // Logika pencarian
+  /// Logika pencarian gempa
   void searchEarthquakes(String query) {
+    if (_earthquakes.isEmpty) {
+      _logger.w("Search attempted with empty earthquake list.");
+      return;
+    }
+
     if (query.isEmpty) {
-      _filteredEarthquakes = _earthquakes; // Semua data jika query kosong
+      _filteredEarthquakes = _earthquakes;
     } else {
       _filteredEarthquakes = _earthquakes
           .where((quake) => quake.place.toLowerCase().contains(query.toLowerCase()))
           .toList();
+      _logger.i("Found ${_filteredEarthquakes.length} results for query: $query");
     }
-    notifyListeners(); // Beritahu UI untuk refresh data
+    notifyListeners();
   }
 
-  void toggleTheme() {}
+  // Private method untuk set loading state
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  // Private method untuk set error state
+  void _setError(String? error) {
+    _error = error;
+    notifyListeners();
+  }
 }

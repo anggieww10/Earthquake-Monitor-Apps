@@ -1,7 +1,8 @@
 class Earthquake {
+  
   final String place;
   final double magnitude;
-  final String time;
+  final DateTime time;
 
   Earthquake({
     required this.place,
@@ -9,11 +10,15 @@ class Earthquake {
     required this.time,
   });
 
+  /// Membuat instance Earthquake dari JSON
   factory Earthquake.fromJson(Map<String, dynamic> json) {
     return Earthquake(
       place: json['properties']['place'] ?? 'Unknown Location',
-      magnitude: json['properties']['mag']?.toDouble() ?? 0.0,
-      time: DateTime.fromMillisecondsSinceEpoch(json['properties']['time']).toString(),
+      magnitude: (json['properties']['mag'] ?? 0.0).toDouble(),
+      time: DateTime.fromMillisecondsSinceEpoch(
+        json['properties']['time'] ?? 0,
+        isUtc: true,
+      ),
     );
   }
 }

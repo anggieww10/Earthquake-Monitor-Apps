@@ -5,7 +5,8 @@ class CustomHeader extends StatelessWidget {
   final VoidCallback onRefresh; // Callback untuk tombol refresh
   final bool isDarkMode; // Status dark mode
 
-  const CustomHeader({super.key, 
+  const CustomHeader({
+    super.key,
     required this.onToggleTheme,
     required this.onRefresh,
     required this.isDarkMode,
@@ -13,18 +14,22 @@ class CustomHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // Mendapatkan tema saat ini
+    final backgroundColor = theme.colorScheme.primary; // Warna latar belakang
+    final shadowColor = isDarkMode ? Colors.black.withOpacity(0.5) : Colors.grey.withOpacity(0.2);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       decoration: BoxDecoration(
-        color: isDarkMode ? Colors.grey[900] : Colors.teal,
-        borderRadius: BorderRadius.vertical(
+        color: backgroundColor,
+        borderRadius: const BorderRadius.vertical(
           bottom: Radius.circular(16.0),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: shadowColor,
             blurRadius: 8,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -38,26 +43,27 @@ class CustomHeader extends StatelessWidget {
                 'assets/images/geger-logo-final.png',
                 height: 40,
                 errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.image_not_supported, color: Colors.white, size: 40);
+                  return Icon(
+                    Icons.image_not_supported,
+                    color: theme.colorScheme.onPrimary,
+                    size: 40,
+                  );
                 },
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Geger",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: theme.colorScheme.onPrimary,
                     ),
                   ),
                   Text(
                     "Earthquake Monitor",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onPrimary.withOpacity(0.7),
                     ),
                   ),
                 ],
@@ -70,7 +76,7 @@ class CustomHeader extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.refresh,
-                  color: Colors.white,
+                  color: theme.colorScheme.onPrimary,
                 ),
                 tooltip: "Refresh Data",
                 onPressed: onRefresh,
@@ -78,9 +84,9 @@ class CustomHeader extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                  color: Colors.white,
+                  color: theme.colorScheme.onPrimary,
                 ),
-                tooltip: "Toggle Theme",
+                tooltip: isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode",
                 onPressed: onToggleTheme,
               ),
             ],

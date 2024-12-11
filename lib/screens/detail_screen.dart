@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Tambahkan intl untuk format waktu
 import '../models/earthquake_model.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -8,15 +9,13 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Mendapatkan tema aktif
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "Earthquake Details",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
@@ -70,7 +69,7 @@ class DetailScreen extends StatelessWidget {
                   Icon(Icons.access_time, color: theme.iconTheme.color, size: 24),
                   const SizedBox(width: 10),
                   Text(
-                    earthquake.time,
+                    DateFormat('EEEE, MMM d, yyyy hh:mm a').format(earthquake.time),
                     style: TextStyle(
                       fontSize: 16,
                       color: theme.textTheme.bodyMedium?.color,
@@ -82,7 +81,7 @@ class DetailScreen extends StatelessWidget {
               Divider(color: theme.dividerColor, thickness: 1),
               const SizedBox(height: 16),
 
-              // Info Tambahan
+              // Informasi Tambahan
               const Text(
                 "Additional Information:",
                 style: TextStyle(

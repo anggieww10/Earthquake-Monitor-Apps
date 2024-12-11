@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Untuk format waktu
 import '../models/earthquake_model.dart';
 import '../screens/detail_screen.dart';
 
 class EarthquakeCard extends StatelessWidget {
   final Earthquake earthquake;
 
-  const EarthquakeCard({required this.earthquake});
+  const EarthquakeCard({super.key, required this.earthquake});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context); // Mendapatkan tema aktif
+
+    // Variabel untuk styling
+    final textColor = theme.textTheme.bodyMedium?.color;
+    final cardColor = theme.cardColor;
+    final borderColor = theme.brightness == Brightness.dark
+        ? Colors.teal.withOpacity(0.3)
+        : Colors.grey.withOpacity(0.3);
+    final shadowColor = theme.brightness == Brightness.light
+        ? Colors.grey.withOpacity(0.2)
+        : Colors.transparent;
+
+    // Format waktu dari DateTime ke String
+    final formattedTime = DateFormat('EEEE, MMM d, yyyy hh:mm a').format(earthquake.time);
 
     return InkWell(
       onTap: () {
@@ -21,21 +35,17 @@ class EarthquakeCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         decoration: BoxDecoration(
-          color: theme.cardColor, // Warna card mengikuti tema
+          color: cardColor,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: theme.brightness == Brightness.dark
-                ? Colors.teal.withOpacity(0.3) // Warna border untuk mode gelap
-                : Colors.grey.withOpacity(0.3), // Warna border untuk mode terang
-          ),
+          border: Border.all(color: borderColor),
           boxShadow: [
-            if (theme.brightness == Brightness.light)
+            if (shadowColor != Colors.transparent)
               BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
+                color: shadowColor,
                 blurRadius: 8,
-                offset: Offset(0, 4),
+                offset: const Offset(0, 4),
               ),
           ],
         ),
@@ -47,12 +57,12 @@ class EarthquakeCard extends StatelessWidget {
               // Lokasi Gempa
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.location_on,
                     color: Colors.teal,
                     size: 20,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       earthquake.place,
@@ -66,7 +76,8 @@ class EarthquakeCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
               // Magnitudo
               Row(
                 children: [
@@ -74,7 +85,7 @@ class EarthquakeCard extends StatelessWidget {
                     "Magnitude: ",
                     style: TextStyle(
                       fontSize: 16,
-                      color: theme.textTheme.bodyMedium?.color,
+                      color: textColor,
                     ),
                   ),
                   Text(
@@ -89,7 +100,8 @@ class EarthquakeCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
               // Waktu Gempa
               Row(
                 children: [
@@ -100,12 +112,12 @@ class EarthquakeCard extends StatelessWidget {
                         : Colors.grey,
                     size: 20,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
-                    earthquake.time,
+                    formattedTime,
                     style: TextStyle(
                       fontSize: 14,
-                      color: theme.textTheme.bodyMedium?.color,
+                      color: textColor,
                     ),
                   ),
                 ],

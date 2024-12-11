@@ -1,4 +1,4 @@
-# siganta
+# siganta (Eaertquake Monitor Apps) Using State Manamengent Provider Flutter
 
 A new Flutter project.
 
